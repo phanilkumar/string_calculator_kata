@@ -4,7 +4,8 @@ class StringCalculator
     
     numbers_array = parse_numbers(numbers)
     validate_no_negatives(numbers_array)
-    numbers_array.sum
+    filtered_numbers = filter_large_numbers(numbers_array)
+    filtered_numbers.sum
   end
 
   private
@@ -24,5 +25,9 @@ class StringCalculator
     if negative_numbers.any?
       raise ArgumentError, "negative numbers not allowed #{negative_numbers.join(',')}"
     end
+  end
+
+  def filter_large_numbers(numbers_array)
+    numbers_array.select { |n| n <= 1000 }
   end
 end
