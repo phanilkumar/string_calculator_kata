@@ -13,23 +13,40 @@ class StringCalculator
   def parse_numbers(numbers)
     if numbers.start_with?('//')
       delimiter, numbers_part = numbers.split("\n", 2)
-      custom_delimiter = extract_delimiter(delimiter)
-      numbers_part.split(custom_delimiter).map(&:to_i)
+      delimiters = extract_delimiters(delimiter)
+      split_by_delimiters(numbers_part, delimiters).map(&:to_i)
     else
       numbers.split(/[,\n]/).map(&:to_i)
     end
   end
 
-  def extract_delimiter(delimiter_string)
+  def extract_delimiters(delimiter_string)
     # Remove '//' prefix
     delimiter_content = delimiter_string[2..-1]
     
-    # Check if it's multi-character delimiter format [delimiter]
-    if delimiter_content.start_with?('[') && delimiter_content.end_with?(']')
-      delimiter_content[1..-2]  # Remove [ and ]
+    # Check if it contains multiple delimiters [delim1][delim2]
+    if delimiter_content.include?('][')
+      # Multiple delimiters: extract each [delimiter] part
+      delimiter_content.scan(/\[([^\]]+)\]/).flatten
+    elsif delimiter_content.start_with?('[') && delimiter_content.end_with?(']')
+      # Single multi-character delimiter
+      [delimiter_content[1..-2]]
     else
-      delimiter_content  # Single character delimiter
+      # Single character delimiter
+      [delimiter_content]
     end
+  end
+
+  def split_by_delimiters(text, delimiters)
+    # Start with the original text
+    result = [text]
+    
+    # Split by each delimiter in sequence
+    delimiters.each do |delimiter|
+      result = result.flat_map { |part| part.split(delimiter) }
+    end
+    
+    result
   end
 
   def validate_no_negatives(numbers_array)
