@@ -71,5 +71,15 @@ RSpec.describe StringCalculator do
       calculator = StringCalculator.new
       expect(calculator.add("//[**][%%]\n1**2%%3")).to eq(6)
     end
+
+    it 'treats empty numbers as zero' do
+      calculator = StringCalculator.new
+      expect(calculator.add('1,,3')).to eq(4)
+    end
+
+    it 'treats empty numbers with newlines as zero' do
+      calculator = StringCalculator.new
+      expect(calculator.add("1,\n,3")).to eq(4)
+    end
   end
 end
