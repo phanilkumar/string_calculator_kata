@@ -81,5 +81,15 @@ RSpec.describe StringCalculator do
       calculator = StringCalculator.new
       expect(calculator.add("1,\n,3")).to eq(4)
     end
+
+    it 'handles whitespace around numbers' do
+      calculator = StringCalculator.new
+      expect(calculator.add(' 1 , 2 , 3 ')).to eq(6)
+    end
+
+    it 'handles whitespace with custom delimiters' do
+      calculator = StringCalculator.new
+      expect(calculator.add("//;\n 1 ; 2 ; 3 ")).to eq(6)
+    end
   end
 end
