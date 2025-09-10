@@ -13,10 +13,22 @@ class StringCalculator
   def parse_numbers(numbers)
     if numbers.start_with?('//')
       delimiter, numbers_part = numbers.split("\n", 2)
-      custom_delimiter = delimiter[2..-1]  # Remove '//' prefix
+      custom_delimiter = extract_delimiter(delimiter)
       numbers_part.split(custom_delimiter).map(&:to_i)
     else
       numbers.split(/[,\n]/).map(&:to_i)
+    end
+  end
+
+  def extract_delimiter(delimiter_string)
+    # Remove '//' prefix
+    delimiter_content = delimiter_string[2..-1]
+    
+    # Check if it's multi-character delimiter format [delimiter]
+    if delimiter_content.start_with?('[') && delimiter_content.end_with?(']')
+      delimiter_content[1..-2]  # Remove [ and ]
+    else
+      delimiter_content  # Single character delimiter
     end
   end
 
