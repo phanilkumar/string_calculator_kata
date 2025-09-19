@@ -5,7 +5,13 @@ class StringCalculator
     numbers_array = parse_numbers(numbers)
     validate_no_negatives(numbers_array)
     filtered_numbers = filter_large_numbers(numbers_array)
-    filtered_numbers.sum
+    
+    # Check if we should multiply instead of add
+    if should_multiply?(numbers)
+      filtered_numbers.reduce(:*)
+    else
+      filtered_numbers.sum
+    end
   end
 
   private
@@ -58,5 +64,15 @@ class StringCalculator
 
   def filter_large_numbers(numbers_array)
     numbers_array.select { |n| n <= 1000 }
+  end
+
+  def should_multiply?(numbers)
+    return false unless numbers.start_with?("//")
+    
+    delimiter, _ = numbers.split("\n", 2)
+    delimiters = extract_delimiters(delimiter)
+    
+    # Check if any delimiter is "*"
+    delimiters.include?("*")
   end
 end
