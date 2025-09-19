@@ -92,5 +92,10 @@ RSpec.describe StringCalculator do
       calculator = StringCalculator.new
       expect(calculator.add("//;\n 1 ; 2 ; 3 ")).to eq(6)
     end
+
+    it 'handles custom deligator is * we want to multiply the numbers' do
+      calculator = StringCalculator.new
+      expect(calculator.add("//[*]\n3*2*3")).to eq(18)
+    end
   end
 end
